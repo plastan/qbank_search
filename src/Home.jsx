@@ -1,7 +1,7 @@
 
 
 import { effect, signal } from "@preact/signals-react";
-import {useState , useEffect} from 'react';
+
 import "./styles.css"
 import axios from 'axios';
 // import {Cards} from './cards';
@@ -11,7 +11,7 @@ const tray = signal([]);
 
 
 export  function Home() {
-    const [stuffs,setstuffs] = useState([]);  
+    // const [stuffs,setstuffs] = useState([]);  
     let list_of_items = [];
     fetch("os.json")
   .then(response => response.json())
@@ -63,10 +63,9 @@ export  function Home() {
     
   
     // console.log(tray.value.length)
-    let tem = [];
-  
-    // tem = stuffs.slice(1,10);
     
+  
+    let tem = [];
     for (let i =0; i < tray.value.slice(1,10).length;i++){
       tem.push(hmap.get(tray.value[i]));
     }
