@@ -1,75 +1,48 @@
-
-
-import { effect, signal } from "@preact/signals-react";
-
+import { useEffect,useState } from "react";
 import "./styles.css"
-import axios from 'axios';
-// import {Cards} from './cards';
-// import {card} from './card';
-const query = signal("");
-const tray = signal([]);
+
+
+fetch("os.json")
+.then(response => response.json())
+.then(json => {
+localStorage.setItem("paper",JSON.stringify(json));
+})
+
+const Fdata = JSON.parse(localStorage.paper);
+  
+const hmap = new Map(Object.entries(Fdata));
 
 
 export  function Home() {
-    // const [stuffs,setstuffs] = useState([]);  
-    let list_of_items = [];
-    fetch("os.json")
-  .then(response => response.json())
-  .then(json => {
-    // console.log(json);
-    localStorage.setItem("paper",JSON.stringify(json));
-  })
+  const [results, setResults] = useState([]);
+//   const [query,setQuery] = useState("");  
+
+ 
 
 
 
-  const Fdata = JSON.parse(localStorage.paper);
-  // console.log(Fdata);
-  const hmap = new Map(Object.entries(Fdata));
-  // console.log(hmap);
-
-  function search(svalue){
-    
+  function performSearch(svalue){  
+    let count = 0;
+    let res = [];
     for (const [key, value] of hmap) {
-      
-      if (value.q.includes(svalue)) {
-        // console.log(`Key: ${key}, Value: ${value}`); 
-        tray.value=[...tray.value, key];
-      }
+        if (value.q.includes(svalue)) {
+            res.push(key);
+            count +=1 ;
+        }
+        // if (count == 10)break;
+        
     }
+    setResults(res);
+    console.log(res);
   
   }
-  
-    // function handleQuery(value) {
-    //    query.value = value;
-  
-    //   axios.get('http://127.0.0.1:8000/query?s=' + value)
-    //     .then(function (response) {
-    //       // handle success
-    //       // console.log(response.data.data);
-    //       tray.value = [...response.data.data]
-    //       setstuffs([...response.data.data])
-          
-    //       // console.log(tray.value.length)
-    //     })
-    //     .catch(function (error) {
-    //       // handle error
-    //       console.log(error);
-    //     })
-    //     .finally(function () {
-    //       // always executed
-    //     });
-    // }
-    // console.log(tray.value)
-    
-  
-    // console.log(tray.value.length)
-    
-  
+
     let tem = [];
-    for (let i =0; i < tray.value.slice(1,10).length;i++){
-      tem.push(hmap.get(tray.value[i]));
+    for (let i =0; i < results.slice(1,10).length;i++){
+      tem.push(hmap.get(results[i]));
     }
-    console.log(tem)
+    
+
     return (
   
       <div className='container'>
@@ -77,7 +50,12 @@ export  function Home() {
           <input
             className='search'
             type="text"
-            onKeyDownCapture={e => search(e.target.value)}
+            onKeyDownCapture={e => {
+                if (e.target.value.trim() != ""){
+                    performSearch()
+                }
+                performSearch(e.target.value);
+            }}
           />
   
           <input type='submit' className='btn-search'/>
