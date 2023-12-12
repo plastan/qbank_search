@@ -33,12 +33,12 @@ export  function Home() {
         
     }
     setResults(res);
-    console.log(res);
+
   
   }
 
     let tem = [];
-    for (let i =0; i < results.slice(1,10).length;i++){
+    for (let i =0; i < results.length;i++){
       tem.push(hmap.get(results[i]));
     }
     
@@ -58,10 +58,10 @@ export  function Home() {
             }}
           />
   
-          <input type='submit' className='btn-search'/>
         </div>
-        {tem.map(x=> <p>{x.q}</p>)}
-        
+        <div className="result">
+        {tem.map(x=> <p>{x.q}</p>)}      
+        </div>
       </div>
   
     )
